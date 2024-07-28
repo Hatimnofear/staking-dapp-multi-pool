@@ -4,7 +4,7 @@ import { getStakingContract, getTokenContract } from '../utils/contract';
 import { ethers } from 'ethers';
 
 const Pool = ({ pool }) => {
-  const { provider, signer } = useWeb3();
+  const { provider, signer, account } = useWeb3();
   const [amount, setAmount] = useState('');
   const [balance, setBalance] = useState('');
   const [tokenBalance, setTokenBalance] = useState('');
@@ -16,7 +16,7 @@ const Pool = ({ pool }) => {
   }, [signer]);
 
   const stake = async () => {
-    if (!signer) return alert("Signer is not available");
+    if (!signer) return alert('Signer is not available');
 
     try {
       const tokenContract = getTokenContract(signer);
@@ -36,7 +36,7 @@ const Pool = ({ pool }) => {
   };
 
   const withdraw = async () => {
-    if (!signer) return alert("Signer is not available");
+    if (!signer) return alert('Signer is not available');
 
     try {
       const stakingContract = getStakingContract(signer);
@@ -51,7 +51,7 @@ const Pool = ({ pool }) => {
   };
 
   const getBalance = async () => {
-    if (!signer) return alert("Signer is not available");
+    if (!signer) return alert('Signer is not available');
 
     try {
       const stakingContract = getStakingContract(signer);
@@ -63,7 +63,7 @@ const Pool = ({ pool }) => {
   };
 
   const getTokenBalance = async () => {
-    if (!signer) return alert("Signer is not available");
+    if (!signer) return alert('Signer is not available');
 
     try {
       const tokenContract = getTokenContract(signer);
