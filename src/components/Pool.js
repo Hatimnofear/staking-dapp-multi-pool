@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useWeb3 } from '../context/Web3Provider';
+//import { useWeb3 } from '../context/Web3Provider';
 import { getStakingContract, getTokenContract } from '../utils/contract';
 import { ethers } from 'ethers';
+
+import { useWeb3 } from '../context/useWeb3';
 
 const Pool = ({ pool }) => {
   const { provider, signer, account } = useWeb3();

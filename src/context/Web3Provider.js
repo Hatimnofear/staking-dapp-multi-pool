@@ -1,47 +1,21 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+// src/context/Web3Provider.js
 import { ethers } from 'ethers';
 
-const Web3Context = createContext();
-
-export const Web3Provider = ({ children }) => {
-  const [provider, setProvider] = useState(null);
-  const [signer, setSigner] = useState(null);
-  const [account, setAccount] = useState(null);
-
-  useEffect(() => {
-    const initializeProvider = async () => {
-      console.log('Initializing provider...');
-      if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
+export async function initializeProvider() {
+    console.log("Initializing provider...");
+    if (typeof window.ethereum !== 'undefined') {
         try {
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
-          console.log('Provider initialized:', provider);
-          const signer = provider.getSigner();
-          console.log('Signer obtained:', signer);
-          const accounts = await provider.listAccounts();
-          const account = accounts.length > 0 ? accounts[0] : null;
-          console.log('Accounts:', accounts);
-
-          setProvider(provider);
-          setSigner(signer);
-          setAccount(account);
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            console.log("Account connected: ", await signer.getAddress());
+            return { provider, signer };
         } catch (error) {
-          console.error('Error initializing provider:', error);
+            console.error("Error initializing provider: ", error);
+            return { provider: null, signer: null };
         }
-      } else {
-        console.error('Metamask is not installed');
-      }
-    };
-
-    initializeProvider();
-  }, []);
-
-  return (
-    <Web3Context.Provider value={{ provider, signer, account }}>
-      {children}
-    </Web3Context.Provider>
-  );
-};
-
-export const useWeb3 = () => {
-  return useContext(Web3Context);
-};
+    } else {
+        console.log("Please install MetaMask!");
+        return { provider: null, signer: null };
+    }
+}
